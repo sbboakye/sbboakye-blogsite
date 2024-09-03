@@ -7,7 +7,7 @@ import org.http4s.server.Router
 
 class BlogsController[F[_]: Concurrent] {
 
-  val dsl: Http4sDsl[F] = new Http4sDsl[F] {}
+  private val dsl: Http4sDsl[F] = new Http4sDsl[F] {}
   import dsl._
 
   private val getAllBlogs: HttpRoutes[F] = HttpRoutes.of[F] { case GET -> Root =>
