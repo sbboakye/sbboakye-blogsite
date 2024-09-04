@@ -19,20 +19,23 @@ class BlogService[F[_]: Sync] {
     Ok(ListView.render)
   }
 
-  private val detailViewRoute: HttpRoutes[F] = HttpRoutes.of[F] { case GET -> Root =>
-    Ok(DetailView.render)
+  private val detailViewRoute: HttpRoutes[F] = HttpRoutes.of[F] {
+    case GET -> Root / UUIDVar(blogId) =>
+      Ok(DetailView.render)
   }
 
-  private val createViewRoute: HttpRoutes[F] = HttpRoutes.of[F] { case GET -> Root =>
+  private val createViewRoute: HttpRoutes[F] = HttpRoutes.of[F] { case POST -> Root / "create" =>
     Ok(CreateView.render)
   }
 
-  private val updateViewRoute: HttpRoutes[F] = HttpRoutes.of[F] { case GET -> Root =>
-    Ok(UpdateView.render)
+  private val updateViewRoute: HttpRoutes[F] = HttpRoutes.of[F] {
+    case PUT -> Root / UUIDVar(blogId) / "edit" =>
+      Ok(UpdateView.render)
   }
 
-  private val deleteViewRoute: HttpRoutes[F] = HttpRoutes.of[F] { case GET -> Root =>
-    Ok(DeleteView.render)
+  private val deleteViewRoute: HttpRoutes[F] = HttpRoutes.of[F] {
+    case DELETE -> Root / UUIDVar(blogId) / "delete" =>
+      Ok(DeleteView.render)
   }
 
   val routes: HttpRoutes[F] = Router(
