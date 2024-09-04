@@ -1,7 +1,8 @@
 package com.sbboakye.blog.services
 
+import cats.syntax.all.*
 import cats.effect.Sync
-import com.sbboakye.blog.views.BlogsView
+import com.sbboakye.blog.views.BlogsView.*
 import org.http4s.dsl.Http4sDsl
 import org.http4s.{scalatags as httpsTags, *}
 import org.http4s.scalatags.*
@@ -12,12 +13,31 @@ class BlogService[F[_]: Sync] {
   private val dsl: Http4sDsl[F] = new Http4sDsl[F] {}
   import dsl.*
 
-  private val listBlogs: HttpRoutes[F] = HttpRoutes.of[F] { case GET -> Root =>
-    val allBlogs = BlogsView.Child.render
-    Ok(allBlogs)
+  private val prefix = "/"
+
+  private val listViewRoute: HttpRoutes[F] = HttpRoutes.of[F] { case GET -> Root =>
+    Ok(ListView.render)
   }
 
-  val routes: HttpRoutes[F] = Router("/" -> listBlogs)
+  private val detailViewRoute: HttpRoutes[F] = HttpRoutes.of[F] { case GET -> Root =>
+    Ok(DetailView.render)
+  }
+
+  private val createViewRoute: HttpRoutes[F] = HttpRoutes.of[F] { case GET -> Root =>
+    Ok(CreateView.render)
+  }
+
+  private val updateViewRoute: HttpRoutes[F] = HttpRoutes.of[F] { case GET -> Root =>
+    Ok(UpdateView.render)
+  }
+
+  private val deleteViewRoute: HttpRoutes[F] = HttpRoutes.of[F] { case GET -> Root =>
+    Ok(DeleteView.render)
+  }
+
+  val routes: HttpRoutes[F] = Router(
+    prefix -> (listViewRoute <+> detailViewRoute <+> createViewRoute <+> updateViewRoute <+> deleteViewRoute)
+  )
 
 }
 

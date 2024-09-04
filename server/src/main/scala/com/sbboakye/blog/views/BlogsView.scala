@@ -1,32 +1,13 @@
 package com.sbboakye.blog.views
 
-import scalatags.Text
-import scalatags.Text.all.*
-import scalatags.Text.tags2.title as mainTitle
+import HomePage.Home
 
 object BlogsView {
 
-  class Parent {
-    def render: Text.TypedTag[String] = html(headFrag, bodyFrag)
-
-    private def headFrag: Text.TypedTag[String] = head(
-      script("some script"),
-      mainTitle("Hello World"),
-      link(
-        href := "https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css",
-        rel  := "stylesheet"
-      )
-    )
-
-    private def bodyFrag: Text.TypedTag[String] = body(
-      h1("This is my simple title"),
-      div(
-        p("This is my first paragraph"),
-        p("This is my second paragraph")
-      )
-    )
-  }
-
-  object Child extends Parent
+  object ListView   extends Home
+  object DetailView extends Home
+  object CreateView extends Home
+  object UpdateView extends Home
+  object DeleteView extends Home
 
 }
