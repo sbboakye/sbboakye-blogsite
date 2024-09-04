@@ -2,7 +2,7 @@ package com.sbboakye.blog
 
 import cats.effect.{IO, IOApp, Resource}
 import com.comcast.ip4s.{ipv4, port}
-import com.sbboakye.blog.controllers.BlogsController
+import com.sbboakye.blog.controllers.BlogController
 import org.http4s.HttpRoutes
 import org.http4s.ember.server.EmberServerBuilder
 import org.http4s.server.Server
@@ -18,7 +18,7 @@ object Application extends IOApp.Simple {
     logBody = true,
     redactHeadersWhen = _ => false,
     logAction = Some((msg: String) => Logger[IO].info(msg))
-  )(BlogsController[IO].routes)
+  )(BlogController[IO].routes)
 
   private val errorActionService: HttpRoutes[IO] = ErrorAction.httpRoutes[IO](
     loggerService,

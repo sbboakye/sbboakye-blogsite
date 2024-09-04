@@ -13,7 +13,7 @@ case class Blog(
 object Blog {
   val dummy: Blog = Blog(
     "Hello World",
-    "Some helo world blog type",
+    "Some hello world blog type",
     "Sambeth",
     LocalDateTime.now(),
     LocalDateTime.now()
