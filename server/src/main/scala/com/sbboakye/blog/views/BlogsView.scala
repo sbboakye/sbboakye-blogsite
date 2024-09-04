@@ -1,10 +1,10 @@
-package com.sbboakye.blog.controllers
+package com.sbboakye.blog.views
 
 import scalatags.Text
 import scalatags.Text.all.*
 import scalatags.Text.tags2.title as mainTitle
 
-object BlogViews {
+object BlogsView {
 
   class Parent {
     def render: Text.TypedTag[String] = html(headFrag, bodyFrag)
