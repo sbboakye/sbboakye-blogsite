@@ -4,7 +4,7 @@ import cats.syntax.all.*
 import cats.effect.Sync
 import com.sbboakye.blog.views.BlogsView.*
 import org.http4s.dsl.Http4sDsl
-import org.http4s.{scalatags as httpsTags, *}
+import org.http4s.*
 import org.http4s.scalatags.*
 import org.http4s.server.Router
 

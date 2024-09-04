@@ -2,7 +2,7 @@
 
 ## Overview
 
-A brief description of the project, including its purpose, goals, and main features.
+A simple CRUD blogsite using Scala, Scalatags, Http4s and HTMX.
 
 ## Table of Contents
 
