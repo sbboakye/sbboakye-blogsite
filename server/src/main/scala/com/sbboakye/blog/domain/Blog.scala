@@ -11,11 +11,20 @@ case class Blog(
 )
 
 object Blog {
-  val dummy: Blog = Blog(
-    "Hello World",
-    "Some hello world blog type",
-    "Sambeth",
-    LocalDateTime.now(),
-    LocalDateTime.now()
+  val dummIES: List[Blog] = List(
+    Blog(
+      title = "Hello World",
+      content = "Some hello world blog type",
+      author = "Sambeth",
+      created_date = LocalDateTime.now(),
+      updated_date = LocalDateTime.now()
+    ),
+    Blog(
+      title = "Phyllisi",
+      content = "WHat a wonderful world",
+      author = "Sambeth",
+      created_date = LocalDateTime.now(),
+      updated_date = LocalDateTime.now()
+    )
   )
 }
