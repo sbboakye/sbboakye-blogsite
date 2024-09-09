@@ -3,6 +3,7 @@ package com.sbboakye.blog.views
 import HomePage.Home
 import com.sbboakye.blog.repositories.BlogsRepository
 import com.sbboakye.blog.services.BlogService
+import com.sbboakye.blog.views.htmx.HtmxAttributes
 import scalatags.Text
 import scalatags.Text.all.*
 
@@ -16,7 +17,11 @@ object BlogsView {
     override val bodyContents: Text.TypedTag[String] =
       div(
         BlogService(blogsRepository).listBlogs.map(blog =>
-          a(href := s"/${blog.id}")(
+          a(
+            href := "#",
+            HtmxAttributes.get(s"/${blog.id}"),
+            HtmxAttributes.target("#div-body")
+          )(
             p(blog.title)
           )
         )
@@ -25,16 +30,53 @@ object BlogsView {
 
   class DetailView(id: UUID) extends Home {
     override val bodyContents: Text.TypedTag[String] =
-      val detailBLog = BlogService(blogsRepository).getBlog(id)
+      val detailBlog = BlogService(blogsRepository).getBlog(id)
       div(
-        p(detailBLog.title),
-        p(detailBLog.content),
-        p(detailBLog.author),
-        p(detailBLog.updated_date.toString)
+        p(detailBlog.title),
+        p(detailBlog.content),
+        p(detailBlog.author),
+        p(detailBlog.updated_date.toString),
+        button(
+          "Edit",
+          HtmxAttributes.get(s"/${detailBlog.id}/edit"),
+          HtmxAttributes.target("#div-body")
+        )
       )
   }
+
+  class FormView(maybeId: Option[UUID]) extends Home {
+    override val bodyContents: Text.TypedTag[String] =
+      val detailBlog = BlogService(blogsRepository).getBlog(maybeId.get)
+
+      div(
+        div(
+          input(
+            `type`      := "text",
+            name        := "title",
+            placeholder := "Title",
+            value       := detailBlog.title
+          )
+        ),
+        div(
+          input(
+            `type`      := "text",
+            name        := "content",
+            placeholder := "Content",
+            value       := detailBlog.content
+          )
+        ),
+        button("Update")
+      )
+  }
+
   object CreateView extends Home
-  object UpdateView extends Home
+
+  class UpdateView(id: UUID) extends Home {
+    override val bodyContents: Text.TypedTag[String] =
+      val detailBLog = BlogService(blogsRepository).getBlog(id)
+      ???
+  }
+
   object DeleteView extends Home
 
 }

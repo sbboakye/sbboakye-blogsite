@@ -24,9 +24,7 @@ object HomePage {
     private def bodyFrag: TypedTag[String] =
       body(
         `class` := "container",
-        div(
-          bodyContents
-        )
+        div(id := "div-body", bodyContents)
       )
   }
 

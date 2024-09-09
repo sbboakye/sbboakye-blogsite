@@ -28,9 +28,14 @@ class BlogRoutes[F[_]: Sync] {
     Ok(CreateView.render)
   }
 
+  private val formViewRoute: HttpRoutes[F] = HttpRoutes.of[F] {
+    case GET -> Root / UUIDVar(blogId) / "edit" =>
+      Ok(FormView(Some(blogId)).render)
+  }
+
   private val updateViewRoute: HttpRoutes[F] = HttpRoutes.of[F] {
-    case PUT -> Root / UUIDVar(blogId) / "edit" =>
-      Ok(UpdateView.render)
+    case PUT -> Root / UUIDVar(blogId) / "update" =>
+      Ok(UpdateView(blogId).render)
   }
 
   private val deleteViewRoute: HttpRoutes[F] = HttpRoutes.of[F] {
@@ -39,7 +44,14 @@ class BlogRoutes[F[_]: Sync] {
   }
 
   val routes: HttpRoutes[F] = Router(
-    prefix -> (listViewRoute <+> detailViewRoute <+> createViewRoute <+> updateViewRoute <+> deleteViewRoute)
+    prefix -> (
+      listViewRoute <+>
+        detailViewRoute <+>
+        createViewRoute <+>
+        updateViewRoute <+>
+        deleteViewRoute <+>
+        formViewRoute
+    )
   )
 
 }
