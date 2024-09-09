@@ -10,4 +10,7 @@ object HtmxAttributes {
   def put(endpoint: String): generic.AttrPair[Builder, String]    = attr("hx-put")    := endpoint
   def patch(endpoint: String): generic.AttrPair[Builder, String]  = attr("hx-patch")  := endpoint
   def delete(endpoint: String): generic.AttrPair[Builder, String] = attr("hx-delete") := endpoint
+
+  def target(element: String): generic.AttrPair[Builder, String] = attr("hx-target")  := element
+  def trigger(value: String): generic.AttrPair[Builder, String]  = attr("hx-trigger") := value
 }
