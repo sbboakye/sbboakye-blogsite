@@ -1,8 +1,10 @@
 package com.sbboakye.blog.domain
 
 import java.time.LocalDateTime
+import java.util.UUID
 
 case class Blog(
+    id: UUID,
     title: String,
     content: String,
     author: String,
@@ -11,8 +13,9 @@ case class Blog(
 )
 
 object Blog {
-  val dummIES: List[Blog] = List(
+  val dummies: List[Blog] = List(
     Blog(
+      id = UUID.randomUUID(),
       title = "Hello World",
       content = "Some hello world blog type",
       author = "Sambeth",
@@ -20,6 +23,7 @@ object Blog {
       updated_date = LocalDateTime.now()
     ),
     Blog(
+      id = UUID.randomUUID(),
       title = "Phyllisi",
       content = "WHat a wonderful world",
       author = "Sambeth",

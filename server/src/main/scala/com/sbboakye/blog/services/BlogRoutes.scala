@@ -21,7 +21,7 @@ class BlogRoutes[F[_]: Sync] {
 
   private val detailViewRoute: HttpRoutes[F] = HttpRoutes.of[F] {
     case GET -> Root / UUIDVar(blogId) =>
-      Ok(DetailView.render)
+      Ok(DetailView(blogId).render)
   }
 
   private val createViewRoute: HttpRoutes[F] = HttpRoutes.of[F] { case POST -> Root / "create" =>

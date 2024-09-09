@@ -7,6 +7,8 @@ import scalatags.Text.tags2.title as mainTitle
 object HomePage {
 
   class Home {
+    val bodyContents: TypedTag[String] = div()
+
     def render: TypedTag[String] = html(headFrag, bodyFrag())
 
     private def headFrag: TypedTag[String] = head(
@@ -18,7 +20,7 @@ object HomePage {
       )
     )
 
-    private def bodyFrag(bodyContents: List[TypedTag[String]] = List.empty): TypedTag[String] =
+    private def bodyFrag: TypedTag[String] =
       body(
         `class` := "container",
         div(
