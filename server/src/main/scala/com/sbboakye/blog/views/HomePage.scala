@@ -17,7 +17,8 @@ object HomePage {
       link(
         href := "https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css",
         rel  := "stylesheet"
-      )
+      ),
+      script(src := "https://unpkg.com/htmx.org@2.0.2")
     )
 
     private def bodyFrag: TypedTag[String] =
