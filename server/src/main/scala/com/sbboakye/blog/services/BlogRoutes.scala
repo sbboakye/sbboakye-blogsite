@@ -44,4 +44,4 @@ class BlogRoutes[F[_]: Sync] {
 
 }
 
-object BlogService
+object BlogRoutes
