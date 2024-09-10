@@ -1,6 +1,7 @@
 package com.sbboakye.blog.views
 
 import HomePage.Home
+import com.sbboakye.blog.domain.Blog
 import com.sbboakye.blog.repositories.BlogsRepository
 import com.sbboakye.blog.services.BlogService
 import com.sbboakye.blog.views.htmx.HtmxAttributes
@@ -16,15 +17,16 @@ object BlogsView {
   object ListView extends Home {
     override val bodyContents: Text.TypedTag[String] =
       div(
-        BlogService(blogsRepository).listBlogs.map(blog =>
-          a(
-            href := "#",
-            HtmxAttributes.get(s"/${blog.id}"),
-            HtmxAttributes.target("#div-body")
-          )(
-            p(blog.title)
+        BlogService(blogsRepository).listBlogs
+          .map(blog =>
+            a(
+              href := "#",
+              HtmxAttributes.get(s"/${blog.id}"),
+              HtmxAttributes.target("#div-body")
+            )(
+              p(blog.title)
+            )
           )
-        )
       )
   }
 
@@ -50,7 +52,6 @@ object BlogsView {
 
       form(
         HtmxAttributes.put(s"/${detailBlog.id}/update"),
-        HtmxAttributes.headers("{'Content-Type': 'application/json'}"),
         input(
           `type`      := "text",
           name        := "title",

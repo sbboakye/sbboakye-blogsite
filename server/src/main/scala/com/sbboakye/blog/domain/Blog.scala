@@ -13,7 +13,7 @@ case class Blog(
 )
 
 object Blog {
-  val dummies: List[Blog] = List(
+  val seed: Seq[Blog] = Seq(
     Blog(
       title = "Hello World",
       content = "Some hello world blog type"

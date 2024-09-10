@@ -6,9 +6,9 @@ import java.util.UUID
 
 class BlogsRepository {
 
-  def listBlogs: Seq[Blog] = Blog.dummies
+  def listBlogs: Seq[Blog] = Blog.seed
 
-  def getBlog(id: UUID): Blog = Blog.dummies.find(_.id == id).get
+  def getBlog(id: UUID): Blog = Blog.seed.find(_.id == id).get
 
   def createBlog: Blog = ???
 
