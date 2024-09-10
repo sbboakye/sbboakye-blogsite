@@ -10,6 +10,9 @@ class BlogService(blogsRepository: BlogsRepository) {
   def listBlogs: Seq[Blog] = blogsRepository.listBlogs
 
   def getBlog(id: UUID): Blog = blogsRepository.getBlog(id)
+
+  def updateBlog(id: UUID, title: String, content: String): Option[Blog] =
+    blogsRepository.updateBlog(id, title, content)
 }
 
 object BlogService {

@@ -48,33 +48,36 @@ object BlogsView {
     override val bodyContents: Text.TypedTag[String] =
       val detailBlog = BlogService(blogsRepository).getBlog(maybeId.get)
 
-      div(
-        div(
-          input(
-            `type`      := "text",
-            name        := "title",
-            placeholder := "Title",
-            value       := detailBlog.title
-          )
+      form(
+        HtmxAttributes.put(s"/${detailBlog.id}/update"),
+        HtmxAttributes.headers("{'Content-Type': 'application/json'}"),
+        input(
+          `type`      := "text",
+          name        := "title",
+          placeholder := "Title",
+          id          := "title",
+          value       := detailBlog.title
         ),
-        div(
-          input(
-            `type`      := "text",
-            name        := "content",
-            placeholder := "Content",
-            value       := detailBlog.content
-          )
+        input(
+          `type`      := "text",
+          name        := "content",
+          placeholder := "Content",
+          id          := "content",
+          value       := detailBlog.content
         ),
-        button("Update")
+        button(
+          `type` := "submit",
+          "Update"
+        )
       )
   }
 
   object CreateView extends Home
 
-  class UpdateView(id: UUID) extends Home {
+  class UpdateView(id: UUID, title: String, content: String) extends Home {
     override val bodyContents: Text.TypedTag[String] =
-      val detailBLog = BlogService(blogsRepository).getBlog(id)
-      ???
+      BlogService(blogsRepository).updateBlog(id, title, content)
+      ListView.render
   }
 
   object DeleteView extends Home

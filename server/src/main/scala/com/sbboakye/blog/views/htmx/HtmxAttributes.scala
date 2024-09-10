@@ -13,4 +13,6 @@ object HtmxAttributes {
 
   def target(element: String): generic.AttrPair[Builder, String] = attr("hx-target")  := element
   def trigger(value: String): generic.AttrPair[Builder, String]  = attr("hx-trigger") := value
+  def include(value: String): generic.AttrPair[Builder, String]  = attr("hx-include") := value
+  def headers(value: String): generic.AttrPair[Builder, String]  = attr("hx-headers") := value
 }
