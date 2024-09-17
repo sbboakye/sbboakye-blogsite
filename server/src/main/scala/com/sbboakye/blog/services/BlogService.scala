@@ -1,6 +1,6 @@
 package com.sbboakye.blog.services
 
-import com.sbboakye.blog.domain.Article
+import com.sbboakye.blog.domain.data.Article
 import com.sbboakye.blog.repositories.BlogsRepository
 
 import java.util.UUID

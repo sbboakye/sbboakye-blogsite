@@ -1,4 +1,4 @@
-package com.sbboakye.blog.domain
+package com.sbboakye.blog.domain.data
 
 import java.time.LocalDateTime
 import java.util.UUID

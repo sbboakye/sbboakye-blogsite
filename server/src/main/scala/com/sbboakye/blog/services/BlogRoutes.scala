@@ -2,7 +2,7 @@ package com.sbboakye.blog.services
 
 import cats.syntax.all.*
 import cats.effect.{Concurrent, Sync}
-import com.sbboakye.blog.domain.Article
+import com.sbboakye.blog.domain.data.Article
 import com.sbboakye.blog.views.BlogsView.*
 import org.http4s.dsl.Http4sDsl
 import org.http4s.*
