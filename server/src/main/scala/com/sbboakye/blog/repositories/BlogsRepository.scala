@@ -1,18 +1,18 @@
 package com.sbboakye.blog.repositories
 
-import com.sbboakye.blog.domain.Blog
+import com.sbboakye.blog.domain.Article
 
 import java.util.UUID
 
 class BlogsRepository {
 
-  def listBlogs: Seq[Blog] = Blog.seed
+  def listBlogs: Seq[Article] = Article.seed
 
-  def getBlog(id: UUID): Blog = Blog.seed.find(_.id == id).get
+  def getBlog(id: UUID): Article = Article.seed.find(_.id == id).get
 
-  def createBlog: Blog = ???
+  def createBlog: Article = ???
 
-  def updateBlog(id: UUID, title: String, content: String): Option[Blog] =
+  def updateBlog(id: UUID, title: String, content: String): Option[Article] =
     val blog = getBlog(id)
     println(s"This is the blog: $blog")
     val afterUpdate = Some(blog.copy(title = title, content = content))

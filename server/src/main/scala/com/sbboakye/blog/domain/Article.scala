@@ -3,7 +3,7 @@ package com.sbboakye.blog.domain
 import java.time.LocalDateTime
 import java.util.UUID
 
-case class Blog(
+case class Article(
     id: UUID = UUID.randomUUID(),
     title: String,
     content: String,
@@ -11,16 +11,3 @@ case class Blog(
     created_date: LocalDateTime = LocalDateTime.now(),
     updated_date: LocalDateTime = LocalDateTime.now()
 )
-
-object Blog {
-  val seed: Seq[Blog] = Seq(
-    Blog(
-      title = "Hello World",
-      content = "Some hello world blog type"
-    ),
-    Blog(
-      title = "Phyllisi",
-      content = "WHat a wonderful world"
-    )
-  )
-}

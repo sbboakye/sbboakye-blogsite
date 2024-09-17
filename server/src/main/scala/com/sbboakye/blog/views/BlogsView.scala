@@ -1,7 +1,7 @@
 package com.sbboakye.blog.views
 
 import HomePage.Home
-import com.sbboakye.blog.domain.Blog
+import com.sbboakye.blog.domain.Article
 import com.sbboakye.blog.repositories.BlogsRepository
 import com.sbboakye.blog.services.BlogService
 import com.sbboakye.blog.views.htmx.HtmxAttributes

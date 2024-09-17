@@ -2,7 +2,7 @@ package com.sbboakye.blog.services
 
 import cats.syntax.all.*
 import cats.effect.{Concurrent, Sync}
-import com.sbboakye.blog.domain.Blog
+import com.sbboakye.blog.domain.Article
 import com.sbboakye.blog.views.BlogsView.*
 import org.http4s.dsl.Http4sDsl
 import org.http4s.*
@@ -18,7 +18,7 @@ class BlogRoutes[F[_]: Concurrent] {
   private val dsl: Http4sDsl[F] = new Http4sDsl[F] {}
   import dsl.*
 
-  given EntityDecoder[F, Blog] = jsonOf[F, Blog]
+  given EntityDecoder[F, Article] = jsonOf[F, Article]
 
   private val prefix = "/"
 
