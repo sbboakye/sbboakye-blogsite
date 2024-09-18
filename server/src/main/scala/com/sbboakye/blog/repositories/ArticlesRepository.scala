@@ -17,7 +17,7 @@ trait ArticlesRepository[F[_]]:
   def findAll: F[Seq[Article]]
   def findById(id: UUID): F[Option[Article]]
   def create(title: String, content: String, author: String): F[UUID]
-  def update(title: String, content: String): F[UUID]
+  def update(id: UUID, columnsWithValues: Map[String, String]): F[Article]
   def delete(id: UUID): F[UUID]
 
 object ArticlesRepository {
