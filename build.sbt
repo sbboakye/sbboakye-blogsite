@@ -24,6 +24,7 @@ lazy val server = (project in file("server"))
       "io.circe"              %% "circe-literal"             % circeVersion,
       "org.tpolecat"          %% "doobie-core"               % doobieVersion,
       "org.tpolecat"          %% "doobie-postgres"           % doobieVersion,
+      "org.tpolecat"          %% "doobie-hikari"             % doobieVersion,
       "org.tpolecat"          %% "doobie-specs2"             % doobieVersion,
       "org.typelevel"         %% "log4cats-slf4j"            % "2.7.0",
       "ch.qos.logback"         % "logback-classic"           % "1.5.7",
