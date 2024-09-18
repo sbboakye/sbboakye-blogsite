@@ -40,17 +40,19 @@ object DBConfig {
   private def createTransactor[F[_]](using
       F: Async[F]
   ): F[Resource[F, HikariTransactor[F]]] =
-    load[F].map { config =>
-      for {
-        ec <- ExecutionContexts.fixedThreadPool[F](32)
-        xa <- HikariTransactor.newHikariTransactor[F](
-          driverClassName = config.driver,
-          url = s"jdbc:postgresql://${config.host}:${config.port}/${config.database}",
-          user = config.user,
-          pass = config.password,
-          connectEC = ec,
-          logHandler = None
-        )
-      } yield xa
-    }
+    load[F]
+      .map { config =>
+        for {
+          ec <- ExecutionContexts.fixedThreadPool[F](32)
+          xa <- HikariTransactor.newHikariTransactor[F](
+            driverClassName = config.driver,
+            url = s"jdbc:postgresql://${config.host}:${config.port}/${config.database}",
+            user = config.user,
+            pass = config.password,
+            connectEC = ec,
+            logHandler = None
+          )
+        } yield xa
+      }
+      .handleErrorWith(e => F.raiseError(e))
 }
