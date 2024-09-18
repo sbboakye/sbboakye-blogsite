@@ -46,7 +46,7 @@ object DBConfig {
           ec <- ExecutionContexts.fixedThreadPool[F](32)
           xa <- HikariTransactor.newHikariTransactor[F](
             driverClassName = config.driver,
-            url = s"jdbc:postgresql://${config.host}:${config.port}/${config.database}",
+            url = s"jdbc:postgresql://${config.host}:${config.port.number}/${config.database}",
             user = config.user,
             pass = config.password,
             connectEC = ec,
