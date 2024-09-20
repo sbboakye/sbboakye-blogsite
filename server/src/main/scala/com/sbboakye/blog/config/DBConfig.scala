@@ -1,14 +1,13 @@
-package com.sbboakye.blog.db
+package com.sbboakye.blog.config
 
 import pureconfig.*
 import pureconfig.generic.derivation.default.*
 
-case class Port(number: Int) derives ConfigReader
-
 case class DBConfig(
+    nThreads: Int,
     driver: String,
     host: String,
-    port: Port,
+    port: Int,
     database: String,
     user: String,
     password: String

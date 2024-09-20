@@ -1,9 +1,6 @@
 package com.sbboakye.blog.domain.data
 
-import doobie.util.{Get, Read}
-import doobie.util.meta.Meta
-
-import java.time.LocalDateTime
+import java.time.OffsetDateTime
 import java.util.UUID
 
 case class Article(
@@ -11,6 +8,6 @@ case class Article(
     title: String,
     content: String,
     author: String,
-    created_date: LocalDateTime,
-    updated_date: LocalDateTime
+    created_date: OffsetDateTime,
+    updated_date: OffsetDateTime
 )
