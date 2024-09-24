@@ -4,11 +4,14 @@ import HomeView.Home
 import cats.*
 import cats.effect.*
 import cats.syntax.all.*
+import com.sbboakye.blog.domain.data.Article
 import com.sbboakye.blog.repositories.Articles
 import com.sbboakye.blog.services.ArticleService
 import com.sbboakye.blog.views.htmx.HtmxAttributes
 import scalatags.Text
 import scalatags.Text.all.*
+
+import java.util.UUID
 
 class ArticlesView[F[_]] private (articles: Articles[F])(using F: Concurrent[F]) {
 
@@ -33,58 +36,88 @@ class ArticlesView[F[_]] private (articles: Articles[F])(using F: Concurrent[F])
       }
   }
 
-//  class DetailView(id: UUID) extends Home {
-//    override val bodyContents: Text.TypedTag[String] =
-//      val detailArticle = articleService.findById(id)
-//      div(
-//        p(detailArticle.title),
-//        p(detailArticle.content),
-//        p(detailArticle.author),
-//        p(detailArticle.updated_date.toString),
-//        button(
-//          "Edit",
-//          HtmxAttributes.get(s"/${detailArticle.id}/edit"),
-//          HtmxAttributes.target("#div-body")
-//        )
-//      )
+  class DetailView(id: UUID) extends Home {
+    override val bodyContents: F[Text.TypedTag[String]] =
+      println("After updating i am super bring called")
+      val detailArticle = articleService.findById(id)
+      detailArticle.map {
+        case None => div(p("Not found"))
+        case Some(article) =>
+          div(
+            p(article.title),
+            p(article.content),
+            p(article.author),
+            p(article.updated_date.toString),
+            button(
+              "Edit",
+              HtmxAttributes.get(s"/${article.id}/form"),
+              HtmxAttributes.target("#div-body")
+            )
+          )
+      }
+  }
+
+  class FormView(maybeId: Option[UUID]) extends Home {
+    override val bodyContents: F[Text.TypedTag[String]] = maybeId match
+      case None =>
+        F.pure(
+          form(
+            HtmxAttributes.put(s"//update"),
+            input(
+              `type`      := "text",
+              name        := "title",
+              placeholder := "Title",
+              id          := "title"
+            ),
+            input(
+              `type`      := "text",
+              name        := "content",
+              placeholder := "Content",
+              id          := "content"
+            ),
+            button(
+              `type` := "submit",
+              "Post"
+            )
+          )
+        )
+      case Some(uuid) =>
+        val detailArticle = articleService.findById(uuid)
+        detailArticle.map {
+          case None => div(p("Not found"))
+          case Some(article) =>
+            form(
+              HtmxAttributes.put(s"/${article.id}"),
+              input(
+                `type`      := "text",
+                name        := "title",
+                placeholder := "Title",
+                id          := "title",
+                value       := article.title
+              ),
+              input(
+                `type`      := "text",
+                name        := "content",
+                placeholder := "Content",
+                id          := "content",
+                value       := article.content
+              ),
+              button(
+                `type` := "submit",
+                "Update"
+              )
+            )
+        }
+  }
+
+  object CreateView extends Home
+
+//  class UpdateView(id: UUID, article: Article) extends Home {
+//    override val bodyContents: F[Text.TypedTag[String]] =
+//      articleService.update(id, article)
 //  }
-//
-//  class FormView(maybeId: Option[UUID]) extends Home {
-//    override val bodyContents: Text.TypedTag[String] =
-//      val detailArticle = articleService.findById(maybeId)
-//
-//      form(
-//        HtmxAttributes.put(s"/${detailArticle.id}/update"),
-//        input(
-//          `type`      := "text",
-//          name        := "title",
-//          placeholder := "Title",
-//          id          := "title",
-//          value       := detailArticle.title
-//        ),
-//        input(
-//          `type`      := "text",
-//          name        := "content",
-//          placeholder := "Content",
-//          id          := "content",
-//          value       := detailArticle.content
-//        ),
-//        button(
-//          `type` := "submit",
-//          "Update"
-//        )
-//      )
-//  }
-//
-//  object CreateView extends Home
-//
-//  class UpdateView(id: UUID, title: String, content: String) extends Home {
-//    override val bodyContents: Text.TypedTag[String] =
-//      articleService.update(id, title, content)
-//      ListView.render
-//  }
-//
-//  object DeleteView extends Home
+
+  object DeleteView extends Home
 
 }
 
