@@ -40,7 +40,8 @@ class ArticlesRepository[F[_]: MonadCancelThrow] private (xa: Transactor[F]) ext
       .transact(xa)
 
   override def create(article: Article): F[UUID] =
-    sql"INSERT INTO articles (title, content, author) VALUES ($article.title, $article.content, $article.author)".update
+    sql"""INSERT INTO articles (title, content, author)
+         VALUES (${article.title}, ${article.content}, ${article.author})""".update
       .withUniqueGeneratedKeys[UUID]("id")
       .transact(xa)
 

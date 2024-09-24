@@ -50,7 +50,7 @@ class ArticlesView[F[_]] private (articles: Articles[F])(using F: Concurrent[F])
             p(article.updated_date.toString),
             button(
               "Edit",
-              HtmxAttributes.get(s"/${article.id}/form"),
+              HtmxAttributes.get(s"/${article.id}/update"),
               HtmxAttributes.target("#div-body")
             )
           )
@@ -62,7 +62,7 @@ class ArticlesView[F[_]] private (articles: Articles[F])(using F: Concurrent[F])
       case None =>
         F.pure(
           form(
-            HtmxAttributes.put(s"//update"),
+            HtmxAttributes.post("/create"),
             input(
               `type`      := "text",
               name        := "title",
@@ -109,13 +109,6 @@ class ArticlesView[F[_]] private (articles: Articles[F])(using F: Concurrent[F])
             )
         }
   }
-
-  object CreateView extends Home
-
-//  class UpdateView(id: UUID, article: Article) extends Home {
-//    override val bodyContents: F[Text.TypedTag[String]] =
-//      articleService.update(id, article)
-//  }
 
   object DeleteView extends Home
 

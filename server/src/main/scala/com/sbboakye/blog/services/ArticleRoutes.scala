@@ -41,12 +41,26 @@ class ArticleRoutes[F[_]: Concurrent: Logger] private (articles: Articles[F])(us
       DetailView(articleId).render.flatMap(Ok(_))
   }
 
-//  private val createViewRoute: HttpRoutes[F] = HttpRoutes.of[F] { case POST -> Root / "create" =>
-//    Ok(CreateView.render)
-//  }
+  private val createViewRoute: HttpRoutes[F] = HttpRoutes.of[F] {
+    case req @ POST -> Root / "create" =>
+      for {
+        form <- req.as[UrlForm]
+        articleId <- articleService.create(
+          Article(
+            title = form.getFirst("title").get,
+            content = form.getFirst("content").get
+          )
+        )
+        response <- DetailView(articleId).render.flatMap(Ok(_))
+      } yield response
+  }
 
-  private val formViewRoute: HttpRoutes[F] = HttpRoutes.of[F] {
-    case GET -> Root / UUIDVar(articleId) / "form" =>
+  private val formCreateViewRoute: HttpRoutes[F] = HttpRoutes.of[F] { case GET -> Root / "create" =>
+    FormView(None).render.flatMap(Ok(_))
+  }
+
+  private val formUpdateViewRoute: HttpRoutes[F] = HttpRoutes.of[F] {
+    case GET -> Root / UUIDVar(articleId) / "update" =>
       FormView(Some(articleId)).render.flatMap(Ok(_))
   }
 
@@ -79,10 +93,13 @@ class ArticleRoutes[F[_]: Concurrent: Logger] private (articles: Articles[F])(us
         <+>
           detailViewRoute
           <+>
-          formViewRoute
+          formUpdateViewRoute
           <+>
           updateViewRoute
-//        createViewRoute <+>
+          <+>
+          formCreateViewRoute
+          <+>
+          createViewRoute
 //        deleteViewRoute <+>
     )
   )
