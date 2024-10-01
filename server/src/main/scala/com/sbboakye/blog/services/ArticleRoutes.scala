@@ -82,11 +82,6 @@ class ArticleRoutes[F[_]: Concurrent: Logger] private (articles: Articles[F])(us
       } yield resp
   }
 
-  private val deleteViewRoute: HttpRoutes[F] = HttpRoutes.of[F] {
-    case DELETE -> Root / UUIDVar(articleId) / "delete" =>
-      DeleteView.render.flatMap(Ok(_))
-  }
-
   val routes: HttpRoutes[F] = Router(
     prefix -> (
       listViewRoute
@@ -100,7 +95,6 @@ class ArticleRoutes[F[_]: Concurrent: Logger] private (articles: Articles[F])(us
           formCreateViewRoute
           <+>
           createViewRoute
-//        deleteViewRoute <+>
     )
   )
 

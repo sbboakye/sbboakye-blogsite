@@ -38,7 +38,6 @@ class ArticlesView[F[_]] private (articles: Articles[F])(using F: Concurrent[F])
 
   class DetailView(id: UUID) extends Home {
     override val bodyContents: F[Text.TypedTag[String]] =
-      println("After updating i am super bring called")
       val detailArticle = articleService.findById(id)
       detailArticle.map {
         case None => div(p("Not found"))
@@ -109,8 +108,6 @@ class ArticlesView[F[_]] private (articles: Articles[F])(using F: Concurrent[F])
             )
         }
   }
-
-  object DeleteView extends Home
 
 }
 

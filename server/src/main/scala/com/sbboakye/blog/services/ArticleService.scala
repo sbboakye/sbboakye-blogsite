@@ -19,7 +19,7 @@ class ArticleService[F[_]: Concurrent] private (articles: Articles[F]) {
   def update(id: UUID, article: Article): F[Option[Article]] =
     articles.update(id, article)
 
-  def delete(id: UUID): F[UUID] = articles.delete(id)
+  def delete(id: UUID): F[Int] = articles.delete(id)
 }
 
 object ArticleService {

@@ -18,7 +18,7 @@ trait Articles[F[_]]:
   def findById(id: UUID): F[Option[Article]]
   def create(article: Article): F[UUID]
   def update(id: UUID, article: Article): F[Option[Article]]
-  def delete(id: UUID): F[UUID]
+  def delete(id: UUID): F[Int]
 
 class ArticlesRepository[F[_]: MonadCancelThrow] private (xa: Transactor[F]) extends Articles[F] {
   private val select =
@@ -63,12 +63,11 @@ class ArticlesRepository[F[_]: MonadCancelThrow] private (xa: Transactor[F]) ext
       )
       .transact(xa)
 
-  override def delete(id: UUID): F[UUID] =
+  override def delete(id: UUID): F[Int] =
     val remove    = fr"DELETE FROM articles"
     val fullQuery = remove ++ where(id)
 
-    fullQuery.update
-      .withUniqueGeneratedKeys[UUID]("id")
+    fullQuery.update.run
       .transact(xa)
 }
 
