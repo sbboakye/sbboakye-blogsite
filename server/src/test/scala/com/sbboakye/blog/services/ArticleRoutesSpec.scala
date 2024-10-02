@@ -1,19 +1,26 @@
 package com.sbboakye.blog.services
 
+import java.util.UUID
+
 import cats.effect.*
 import cats.implicits.*
-import com.sbboakye.blog.fixtures.ArticleFixture
-import org.http4s.dsl.Http4sDsl
-import org.scalatest.freespec.AsyncFreeSpec
-import org.scalatest.matchers.should.Matchers
 import cats.effect.testing.scalatest.AsyncIOSpec
-import com.sbboakye.blog.domain.data.Article
-import com.sbboakye.blog.repositories.Articles
-import org.http4s.HttpRoutes
+
+import io.circe.generic.auto.*
+import org.http4s.circe.CirceEntityCodec.*
+import org.http4s.dsl.Http4sDsl
+import org.http4s.*
+import org.http4s.implicits.*
+
 import org.typelevel.log4cats.Logger
 import org.typelevel.log4cats.slf4j.Slf4jLogger
 
-import java.util.UUID
+import org.scalatest.freespec.AsyncFreeSpec
+import org.scalatest.matchers.should.Matchers
+
+import com.sbboakye.blog.fixtures.ArticleFixture
+import com.sbboakye.blog.domain.data.Article
+import com.sbboakye.blog.repositories.Articles
 
 class ArticleRoutesSpec
     extends AsyncFreeSpec
@@ -26,6 +33,7 @@ class ArticleRoutesSpec
     override def findAll: IO[Seq[Article]] = IO.pure(Seq(article))
 
     override def findById(id: UUID): IO[Option[Article]] =
+      println("Did you come back here")
       if (id == articleUuid) then IO.pure(Some(article))
       else IO.pure(None)
 
@@ -39,9 +47,22 @@ class ArticleRoutesSpec
       if (id == articleUuid) then IO.pure(1)
       else IO.pure(0)
 
-    given logger: Logger[IO]           = Slf4jLogger.getLogger[IO]
-    val articlesRoutes: HttpRoutes[IO] = ArticleRoutes[IO](articles).routes
+    given logger: Logger[IO]          = Slf4jLogger.getLogger[IO]
+    val articleRoutes: HttpRoutes[IO] = ArticleRoutes[IO](articles).routes
 
     // testing begins from here
-
+    "ArticleRoutes" - {
+      "should return an article with a given id" in {
+        for {
+          response <- articleRoutes.orNotFound.run(
+            Request(method = Method.GET, uri = uri"/843df718-ec6e-4d49-9289-f799c0f40064")
+          )
+          _         <- logger.info(s"Response: $response")
+          retrieved <- response.as[Article]
+        } yield {
+          response.status shouldBe Status.Ok
+          retrieved shouldBe article
+        }
+      }
+    }
 }

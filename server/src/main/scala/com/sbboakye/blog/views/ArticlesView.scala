@@ -38,7 +38,9 @@ class ArticlesView[F[_]] private (articles: Articles[F])(using F: Concurrent[F])
 
   class DetailView(id: UUID) extends Home {
     override val bodyContents: F[Text.TypedTag[String]] =
+      println(s"Inside detail view")
       val detailArticle = articleService.findById(id)
+      println(s"I got this giys: $detailArticle")
       detailArticle.map {
         case None => div(p("Not found"))
         case Some(article) =>

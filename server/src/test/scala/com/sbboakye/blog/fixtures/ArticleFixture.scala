@@ -2,7 +2,6 @@ package com.sbboakye.blog.fixtures
 
 import com.sbboakye.blog.domain.data.*
 
-import java.time.OffsetDateTime
 import java.util.UUID
 
 trait ArticleFixture {

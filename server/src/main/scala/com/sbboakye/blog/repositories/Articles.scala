@@ -33,6 +33,7 @@ class ArticlesRepository[F[_]: MonadCancelThrow] private (xa: Transactor[F]) ext
       .transact(xa)
 
   override def findById(id: UUID): F[Option[Article]] =
+    println("I am in article repository instead")
     val fullQuery = select ++ fr"WHERE id = $id"
     fullQuery
       .query[Article]
