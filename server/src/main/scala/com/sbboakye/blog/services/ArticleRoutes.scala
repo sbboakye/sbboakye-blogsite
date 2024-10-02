@@ -25,7 +25,7 @@ class ArticleRoutes[F[_]: Concurrent: Logger] private (articles: Articles[F])(us
 
   given EntityDecoder[F, Article] = jsonOf[F, Article]
 
-  val articlesView: ArticlesView[F] = ArticlesView[F](articles)
+  private val articlesView: ArticlesView[F] = ArticlesView[F](articles)
   import articlesView.*
 
   private val articleService: ArticleService[F] = ArticleService[F](articles)
