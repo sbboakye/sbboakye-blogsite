@@ -5,7 +5,8 @@ import cats.effect.*
 import cats.implicits.*
 import com.sbboakye.blog.config.{AppConfig, Database, Db}
 import com.sbboakye.blog.config.syntax.*
-import com.sbboakye.blog.services.ArticleRoutes
+import com.sbboakye.blog.services.{ArticleRoutes, ArticleService}
+import com.sbboakye.blog.views.ArticleViews
 import org.http4s.HttpRoutes
 import org.http4s.ember.server.EmberServerBuilder
 import org.http4s.server.middleware.{ErrorAction, ErrorHandling, Logger as http4sLogger}
@@ -39,13 +40,15 @@ object Application extends IOApp.Simple {
   private val makeServer: IO[Unit] =
     ConfigSource.default.loadF[IO, AppConfig].flatMap { case AppConfig(dbConfig, emberConfig) =>
       val appResource = for {
-        xa       <- Database.makeDbResource[IO](dbConfig)
-        articles <- Db[IO](xa)
+        xa             <- Database.makeDbResource[IO](dbConfig)
+        articlesRepo   <- Db[IO](xa)
+        articleService <- ArticleService[IO](articlesRepo)
+        articleViews   <- ArticleViews[IO](articleService)
         server <- EmberServerBuilder
           .default[IO]
           .withHost(emberConfig.host)
           .withPort(emberConfig.port)
-          .withHttpApp(allService(ArticleRoutes(articles).routes).orNotFound)
+          .withHttpApp(allService(ArticleRoutes(articleViews).routes).orNotFound)
           .build
       } yield server
 

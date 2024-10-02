@@ -26,5 +26,7 @@ class ArticleService[F[_]: Concurrent] private (articles: Articles[F]) {
 }
 
 object ArticleService {
-  def apply[F[_]: Concurrent](articles: Articles[F]) = new ArticleService[F](articles)
+  def apply[F[_]](articles: Articles[F])(using F: Concurrent[F]): Resource[F, ArticleService[F]] =
+    Resource
+      .eval(F.pure(new ArticleService[F](articles)))
 }
