@@ -29,7 +29,10 @@ class ArticleRoutesSpec
     with Http4sDsl[IO]
     with ArticleFixture {
 
-  val articles: Articles[IO] = new Articles[IO]:
+  /*
+  create mock articles repository
+   */
+  val articlesRepo: Articles[IO] = new Articles[IO]:
     override def findAll: IO[Seq[Article]] = IO.pure(Seq(article))
 
     override def findById(id: UUID): IO[Option[Article]] =
@@ -47,22 +50,22 @@ class ArticleRoutesSpec
       if (id == articleUuid) then IO.pure(1)
       else IO.pure(0)
 
-    given logger: Logger[IO]          = Slf4jLogger.getLogger[IO]
-    val articleRoutes: HttpRoutes[IO] = ArticleRoutes[IO](articles).routes
+  given logger: Logger[IO]          = Slf4jLogger.getLogger[IO]
+  val articleRoutes: HttpRoutes[IO] = ArticleRoutes[IO](articles).routes
 
-    // testing begins from here
-    "ArticleRoutes" - {
-      "should return an article with a given id" in {
-        for {
-          response <- articleRoutes.orNotFound.run(
-            Request(method = Method.GET, uri = uri"/843df718-ec6e-4d49-9289-f799c0f40064")
-          )
-          _         <- logger.info(s"Response: $response")
-          retrieved <- response.as[Article]
-        } yield {
-          response.status shouldBe Status.Ok
-          retrieved shouldBe article
-        }
+  // testing begins from here
+  "ArticleRoutes" - {
+    "should return an article with a given id" in {
+      for {
+        response <- articleRoutes.orNotFound.run(
+          Request(method = Method.GET, uri = uri"/843df718-ec6e-4d49-9289-f799c0f40064")
+        )
+        _         <- logger.info(s"Response: $response")
+        retrieved <- response.as[Article]
+      } yield {
+        response.status shouldBe Status.Ok
+        retrieved shouldBe article
       }
     }
+  }
 }

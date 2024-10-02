@@ -5,7 +5,6 @@ import cats.*
 import cats.effect.*
 import cats.syntax.all.*
 import com.sbboakye.blog.domain.data.Article
-import com.sbboakye.blog.repositories.Articles
 import com.sbboakye.blog.services.ArticleService
 import com.sbboakye.blog.views.htmx.HtmxAttributes
 import scalatags.Text
@@ -13,9 +12,7 @@ import scalatags.Text.all.*
 
 import java.util.UUID
 
-class ArticlesView[F[_]] private (articles: Articles[F])(using F: Concurrent[F]) {
-
-  private val articleService: ArticleService[F] = ArticleService[F](articles)
+class ArticleViews[F[_]] private (articleService: ArticleService[F])(using F: Concurrent[F]) {
 
   class ListView extends Home {
     override val bodyContents: F[Text.TypedTag[String]] =
@@ -111,8 +108,20 @@ class ArticlesView[F[_]] private (articles: Articles[F])(using F: Concurrent[F])
         }
   }
 
+  def createView(article: Article): F[UUID] = {
+    articleService.create(article)
+  }
+
+  def updateView(id: UUID, article: Article): F[Option[Article]] = {
+    articleService.update(id, article)
+  }
+
 }
 
-object ArticlesView {
-  def apply[F[_]: Concurrent](articles: Articles[F]) = new ArticlesView[F](articles)
+object ArticleViews {
+  def apply[F[_]](
+      articleService: ArticleService[F]
+  )(using F: Concurrent[F]): Resource[F, ArticleViews[F]] =
+    Resource
+      .eval(F.pure(new ArticleViews[F](articleService)))
 }

@@ -5,10 +5,8 @@ import cats.data.*
 import cats.effect.*
 import cats.syntax.all.*
 import com.sbboakye.blog.domain.data.Article
-import com.sbboakye.blog.repositories.Articles
-import com.sbboakye.blog.views.ArticlesView
+import com.sbboakye.blog.views.ArticleViews
 import org.http4s.*
-import org.http4s.implicits.*
 import org.http4s.circe.*
 import org.http4s.dsl.Http4sDsl
 import org.http4s.scalatags.*
@@ -18,17 +16,16 @@ import org.typelevel.log4cats.Logger
 
 import java.util.UUID
 
-class ArticleRoutes[F[_]: Concurrent: Logger] private (articles: Articles[F])(using F: Monad[F]) {
+class ArticleRoutes[F[_]: Concurrent: Logger] private (articleViews: ArticleViews[F])(using
+    F: Monad[F]
+) {
 
   private val dsl: Http4sDsl[F] = new Http4sDsl[F] {}
   import dsl.*
 
   given EntityDecoder[F, Article] = jsonOf[F, Article]
 
-  private val articlesView: ArticlesView[F] = ArticlesView[F](articles)
-  import articlesView.*
-
-  private val articleService: ArticleService[F] = ArticleService[F](articles)
+  import articleViews.*
 
   private val prefix = "/"
 
@@ -45,7 +42,7 @@ class ArticleRoutes[F[_]: Concurrent: Logger] private (articles: Articles[F])(us
     case req @ POST -> Root / "create" =>
       for {
         form <- req.as[UrlForm]
-        articleId <- articleService.create(
+        articleId <- createView(
           Article(
             title = form.getFirst("title").get,
             content = form.getFirst("content").get
@@ -68,7 +65,7 @@ class ArticleRoutes[F[_]: Concurrent: Logger] private (articles: Articles[F])(us
     case req @ PUT -> Root / UUIDVar(articleId) =>
       for {
         form <- req.as[UrlForm]
-        maybeNewArticle <- articleService.update(
+        maybeNewArticle <- updateView(
           articleId,
           Article(
             title = form.getFirst("title").get,
@@ -101,6 +98,6 @@ class ArticleRoutes[F[_]: Concurrent: Logger] private (articles: Articles[F])(us
 }
 
 object ArticleRoutes {
-  def apply[F[_]: Concurrent: Logger](articles: Articles[F]): ArticleRoutes[F] =
-    new ArticleRoutes[F](articles)
+  def apply[F[_]: Concurrent: Logger](articleViews: ArticleViews[F]): ArticleRoutes[F] =
+    new ArticleRoutes[F](articleViews)
 }
