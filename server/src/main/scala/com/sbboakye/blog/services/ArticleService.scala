@@ -15,7 +15,6 @@ class ArticleService[F[_]: Concurrent] private (articles: Articles[F]) {
     articles.findById(id)
 
   def create(article: Article): F[UUID] =
-    println("I super got here")
     articles.create(article)
 
   def update(id: UUID, article: Article): F[Option[Article]] =

@@ -53,7 +53,14 @@ class ArticleAPIRoutes[F[_]: Concurrent: Logger] private (articleService: Articl
 
   private val updateAPIRoute: HttpRoutes[F] = HttpRoutes.of[F] {
     case req @ PUT -> Root / UUIDVar(articleId) =>
-      ???
+      req.as[ArticleCreate].flatMap { articleCreate =>
+        val article = Article(
+          title = articleCreate.title,
+          content = articleCreate.content,
+          author = articleCreate.author
+        )
+        update(articleId, article).flatMap(_.fold(NotFound())(Ok(_)))
+      }
   }
 
   val routes: HttpRoutes[F] = Router(
