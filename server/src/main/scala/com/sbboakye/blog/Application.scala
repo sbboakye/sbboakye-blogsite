@@ -5,7 +5,7 @@ import cats.effect.*
 import cats.implicits.*
 import com.sbboakye.blog.config.{AppConfig, Database, Db}
 import com.sbboakye.blog.config.syntax.*
-import com.sbboakye.blog.services.{ArticleRoutes, ArticleService}
+import com.sbboakye.blog.services.{ArticleRoutes, ArticleAPIRoutes, ArticleService}
 import com.sbboakye.blog.views.ArticleViews
 import org.http4s.HttpRoutes
 import org.http4s.ember.server.EmberServerBuilder
@@ -35,7 +35,7 @@ object Application extends IOApp.Simple {
 
     errorHandlingService
 
-  override def run: IO[Unit] = makeServer
+  override def run: IO[Unit] = makeAPIServer
 
   private val makeServer: IO[Unit] =
     ConfigSource.default.loadF[IO, AppConfig].flatMap { case AppConfig(dbConfig, emberConfig) =>
@@ -53,6 +53,23 @@ object Application extends IOApp.Simple {
       } yield server
 
       appResource.use(_ => IO.println("Server has started...") *> IO.never)
+    }
+
+  private val makeAPIServer: IO[Unit] =
+    ConfigSource.default.loadF[IO, AppConfig].flatMap { case AppConfig(dbConfig, emberConfig) =>
+      val apiResource = for {
+        xa             <- Database.makeDbResource[IO](dbConfig)
+        articlesRepo   <- Db[IO](xa)
+        articleService <- ArticleService[IO](articlesRepo)
+        server <- EmberServerBuilder
+          .default[IO]
+          .withHost(emberConfig.host)
+          .withPort(emberConfig.port)
+          .withHttpApp(allService(ArticleAPIRoutes(articleService).routes).orNotFound)
+          .build
+      } yield server
+
+      apiResource.use(_ => IO.println("Server has started...") *> IO.never)
     }
 
 }

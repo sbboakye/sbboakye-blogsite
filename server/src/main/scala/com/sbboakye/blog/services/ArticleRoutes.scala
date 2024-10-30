@@ -45,7 +45,8 @@ class ArticleRoutes[F[_]: Concurrent: Logger] private (articleViews: ArticleView
         articleId <- createView(
           Article(
             title = form.getFirst("title").get,
-            content = form.getFirst("content").get
+            content = form.getFirst("content").get,
+            author = form.getFirst("author").get
           )
         )
         response <- DetailView(articleId).render.flatMap(Ok(_))
@@ -69,7 +70,8 @@ class ArticleRoutes[F[_]: Concurrent: Logger] private (articleViews: ArticleView
           articleId,
           Article(
             title = form.getFirst("title").get,
-            content = form.getFirst("content").get
+            content = form.getFirst("content").get,
+            author = form.getFirst("author").get
           )
         )
         resp <- maybeNewArticle match {

@@ -12,11 +12,10 @@ class ArticleService[F[_]: Concurrent] private (articles: Articles[F]) {
   def findAll: F[Seq[Article]] = articles.findAll
 
   def findById(id: UUID): F[Option[Article]] =
-    println("Inside the service")
-    println(s"I found this inside:")
     articles.findById(id)
 
   def create(article: Article): F[UUID] =
+    println("I super got here")
     articles.create(article)
 
   def update(id: UUID, article: Article): F[Option[Article]] =

@@ -4,10 +4,10 @@ import java.time.OffsetDateTime
 import java.util.UUID
 
 case class Article(
-    id: UUID = UUID.fromString("00000000-0000-0000-0000-000000000000"),
+    id: UUID = UUID.randomUUID(),
     title: String,
     content: String,
-    author: String = "sambeth",
+    author: String,
     created_date: OffsetDateTime = OffsetDateTime.MAX,
     updated_date: OffsetDateTime = OffsetDateTime.MAX
 )
