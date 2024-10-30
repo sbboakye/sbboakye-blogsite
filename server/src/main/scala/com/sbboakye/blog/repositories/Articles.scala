@@ -8,4 +8,4 @@ trait Articles[F[_]]:
   def findById(id: UUID): F[Option[Article]]
   def create(article: Article): F[UUID]
   def update(id: UUID, article: Article): F[Option[Article]]
-  def delete(id: UUID): F[Int]
+  def delete(id: UUID): F[Option[Int]]

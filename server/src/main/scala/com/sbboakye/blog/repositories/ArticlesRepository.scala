@@ -57,11 +57,15 @@ class ArticlesRepository[F[_]: MonadCancelThrow] private (xa: Transactor[F]) ext
       )
       .transact(xa)
 
-  override def delete(id: UUID): F[Int] =
+  override def delete(id: UUID): F[Option[Int]] =
     val remove    = fr"DELETE FROM articles"
     val fullQuery = remove ++ where(id)
 
     fullQuery.update.run
+      .map {
+        case 0 => None
+        case n => Some(n)
+      }
       .transact(xa)
 }
 

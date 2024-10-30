@@ -5,10 +5,11 @@ import cats.data.*
 import cats.effect.*
 import cats.syntax.all.*
 import org.http4s.*
-import org.http4s.circe.*
 import org.http4s.dsl.Http4sDsl
 import org.http4s.server.Router
+import org.http4s.circe.*
 import io.circe.generic.auto.*
+import io.circe.syntax.*
 import org.typelevel.log4cats.Logger
 import com.sbboakye.blog.domain.data.{Article, ArticleCreate}
 
@@ -25,6 +26,7 @@ class ArticleAPIRoutes[F[_]: Concurrent: Logger] private (articleService: Articl
   given EntityEncoder[F, Article]       = jsonEncoderOf[F, Article]
   given EntityDecoder[F, ArticleCreate] = jsonOf[F, ArticleCreate]
   given EntityEncoder[F, UUID]          = jsonEncoderOf[F, UUID]
+  given EntityEncoder[F, Int]           = jsonEncoderOf[F, Int]
 
   import articleService.*
 
@@ -63,6 +65,11 @@ class ArticleAPIRoutes[F[_]: Concurrent: Logger] private (articleService: Articl
       }
   }
 
+  private val deleteAPIRoute: HttpRoutes[F] = HttpRoutes.of[F] {
+    case DELETE -> Root / UUIDVar(articleId) =>
+      delete(articleId).flatMap(_.fold(NotFound())(Ok(_)))
+  }
+
   val routes: HttpRoutes[F] = Router(
     prefix -> (
       listAPIRoute
@@ -72,6 +79,8 @@ class ArticleAPIRoutes[F[_]: Concurrent: Logger] private (articleService: Articl
           updateAPIRoute
           <+>
           createAPIRoute
+          <+>
+          deleteAPIRoute
     )
   )
 
