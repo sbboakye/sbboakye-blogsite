@@ -1,6 +1,7 @@
-package com.sbboakye.blog.repositories
+package com.sbboakye.blog.core
 
 import com.sbboakye.blog.domain.data.Article
+
 import java.util.UUID
 
 trait Articles[F[_]]:
