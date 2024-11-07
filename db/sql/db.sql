@@ -21,26 +21,6 @@ CREATE TRIGGER set_updated_date
     FOR EACH ROW
     EXECUTE FUNCTION articles_update_updated_date();
 
--- INSERT INTO articles (
---     title,
---     content,
---     author
--- ) values (
---     'Hello World',
---     'This is a Hello World Example',
---     'Sambeth'
--- );
---
--- INSERT INTO articles (
---     title,
---     content,
---     author
--- ) values (
---     'Phyllis Boatemaah',
---     'This is a Phyllis Boatemaah Example',
---     'Sambeth'
--- );
-
 -- USERS
 CREATE TABLE users (
     email text PRIMARY KEY,
@@ -64,31 +44,3 @@ CREATE TRIGGER set_updated_date
     ON users
     FOR EACH ROW
 EXECUTE FUNCTION update_updated_date();
-
--- INSERT INTO users (
---     email,
---     hashedPassword,
---     firstName,
---     lastName,
---     role
--- ) values (
---     'samuelbaafiboakye@gmail.com',
---     'reallLige',
---     'Samuel',
---     'Boakye',
---     'ADMIN'
---  );
---
--- INSERT INTO users (
---     email,
---     hashedPassword,
---     firstName,
---     lastName,
---     role
--- ) values (
---      'sambethslim@gmail.com',
---      '214fasdsg',
---      'Sam',
---      'Beth',
---      'READER'
---  );

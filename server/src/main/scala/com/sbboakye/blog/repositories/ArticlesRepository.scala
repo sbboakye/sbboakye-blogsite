@@ -3,17 +3,18 @@ package com.sbboakye.blog.repositories
 import cats.*
 import cats.effect.*
 import cats.effect.MonadCancelThrow
-
+import com.sbboakye.blog.core.Articles
 import doobie.*
 import doobie.implicits.*
 import doobie.postgres.*
 import doobie.postgres.implicits.*
-
 import com.sbboakye.blog.domain.data.Article
+import org.typelevel.log4cats.Logger
 
 import java.util.UUID
 
-class ArticlesRepository[F[_]: MonadCancelThrow] private (xa: Transactor[F]) extends Articles[F] {
+class ArticlesRepository[F[_]: MonadCancelThrow: Logger] private (xa: Transactor[F])
+    extends Articles[F] {
   private val select =
     fr"SELECT id, title, content, author, created_date, updated_date FROM articles"
 
@@ -26,7 +27,6 @@ class ArticlesRepository[F[_]: MonadCancelThrow] private (xa: Transactor[F]) ext
       .transact(xa)
 
   override def findById(id: UUID): F[Option[Article]] =
-    println("I am in article repository instead")
     val fullQuery = select ++ fr"WHERE id = $id"
     fullQuery
       .query[Article]
@@ -70,5 +70,9 @@ class ArticlesRepository[F[_]: MonadCancelThrow] private (xa: Transactor[F]) ext
 }
 
 object ArticlesRepository {
-  def apply[F[_]: MonadCancelThrow](xa: Transactor[F]) = new ArticlesRepository[F](xa)
+  def apply[F[_]: MonadCancelThrow: Logger](
+      xa: Transactor[F]
+  )(using F: Async[F]): Resource[F, Articles[F]] =
+    Resource
+      .eval(F.pure(new ArticlesRepository[F](xa)))
 }

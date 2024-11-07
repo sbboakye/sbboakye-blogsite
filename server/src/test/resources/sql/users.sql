@@ -9,12 +9,12 @@ CREATE TABLE IF NOT EXISTS users (
                        updated_date TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE OR REPLACE FUNCTION update_updated_date() RETURNS TRIGGER AS $$
+CREATE OR REPLACE FUNCTION update_updated_date() RETURNS TRIGGER AS '
 BEGIN
     NEW.updated_date = CURRENT_TIMESTAMP;
     RETURN NEW;
 END;
-$$ LANGUAGE plpgsql;
+' LANGUAGE plpgsql;
 
 CREATE TRIGGER set_updated_date
     BEFORE UPDATE
@@ -29,12 +29,12 @@ INSERT INTO users (
     lastName,
     role
 ) values (
-             'samuelbaafiboakye@gmail.com',
-             'reallLige',
-             'Samuel',
-             'Boakye',
-             'ADMIN'
-         );
+     'samuelbaafiboakye@gmail.com',
+     'reallLige',
+     'Samuel',
+     'Boakye',
+     'ADMIN'
+ );
 
 INSERT INTO users (
     email,
@@ -43,9 +43,9 @@ INSERT INTO users (
     lastName,
     role
 ) values (
-             'sambethslim@gmail.com',
-             '214fasdsg',
-             'Sam',
-             'Beth',
-             'READER'
-         );
+     'sambethslim@gmail.com',
+     '214fasdsg',
+     'Sam',
+     'Beth',
+     'READER'
+ );

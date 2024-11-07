@@ -2,8 +2,8 @@ package com.sbboakye.blog.services
 
 import cats.*
 import cats.effect.*
+import com.sbboakye.blog.core.Articles
 import com.sbboakye.blog.domain.data.Article
-import com.sbboakye.blog.repositories.Articles
 
 import java.util.UUID
 
