@@ -17,7 +17,7 @@ class ArticleService[F[_]: Concurrent] private (articles: Articles[F]) {
   def create(article: Article): F[UUID] =
     articles.create(article)
 
-  def update(id: UUID, article: Article): F[Option[Article]] =
+  def update(id: UUID, article: Article): F[Option[Int]] =
     articles.update(id, article)
 
   def delete(id: UUID): F[Option[Int]] = articles.delete(id)

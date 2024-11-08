@@ -10,8 +10,8 @@ trait ArticleFixture {
 
   val article: Article = Article(
     articleUuid,
-    "Hello",
-    "World",
+    "Phyllis",
+    "Phyllis",
     "Sambeth"
   )
 

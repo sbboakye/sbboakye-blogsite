@@ -31,11 +31,13 @@ INSERT INTO articles (
  );
 
 INSERT INTO articles (
+    id,
     title,
     content,
     author
 ) values (
-     'Phyllis Boatemaah',
-     'This is a Phyllis Boatemaah Example',
+    '843df718-ec6e-4d49-9289-f799c0f40064',
+     'Phyllis',
+     'Phyllis',
      'Sambeth'
  );

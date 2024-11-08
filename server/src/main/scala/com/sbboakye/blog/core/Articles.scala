@@ -14,5 +14,5 @@ trait Articles[F[_]]:
   def findAll: F[Seq[Article]]
   def findById(id: UUID): F[Option[Article]]
   def create(article: Article): F[UUID]
-  def update(id: UUID, article: Article): F[Option[Article]]
+  def update(id: UUID, article: Article): F[Option[Int]]
   def delete(id: UUID): F[Option[Int]]

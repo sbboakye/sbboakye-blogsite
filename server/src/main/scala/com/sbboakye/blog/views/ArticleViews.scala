@@ -112,7 +112,7 @@ class ArticleViews[F[_]] private (articleService: ArticleService[F])(using F: Co
     articleService.create(article)
   }
 
-  def updateView(id: UUID, article: Article): F[Option[Article]] = {
+  def updateView(id: UUID, article: Article): F[Option[Int]] = {
     articleService.update(id, article)
   }
 

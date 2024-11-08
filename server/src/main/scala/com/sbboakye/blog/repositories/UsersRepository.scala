@@ -15,7 +15,7 @@ class UsersRepository[F[_]: MonadCancelThrow: Logger] private (xa: Transactor[F]
 
   override def create(article: user.User): F[String] = ???
 
-  override def update(email: String, article: user.User): F[Option[user.User]] = ???
+  override def update(email: String, article: user.User): F[Option[Int]] = ???
 
   override def delete(email: String): F[Option[Int]] = ???
 }

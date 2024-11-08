@@ -9,6 +9,6 @@ trait Users[F[_]]:
 
   def create(article: User): F[String]
 
-  def update(email: String, article: User): F[Option[User]]
+  def update(email: String, article: User): F[Option[Int]]
 
   def delete(email: String): F[Option[Int]]

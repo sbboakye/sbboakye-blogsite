@@ -39,22 +39,18 @@ class ArticlesRepository[F[_]: MonadCancelThrow: Logger] private (xa: Transactor
       .withUniqueGeneratedKeys[UUID]("id")
       .transact(xa)
 
-  override def update(id: UUID, article: Article): F[Option[Article]] =
+  override def update(id: UUID, article: Article): F[Option[Int]] =
     val update  = fr"UPDATE articles"
     val title   = fr"title = ${article.title}"
     val content = fr"content = ${article.content}"
     val setter  = fr"SET " ++ title ++ fr", " ++ content
 
     val fullUpdate = update ++ setter ++ where(id)
-    fullUpdate.update
-      .withUniqueGeneratedKeys[Option[Article]](
-        "id",
-        "title",
-        "content",
-        "author",
-        "created_date",
-        "updated_date"
-      )
+    fullUpdate.update.run
+      .map {
+        case 0 => None
+        case n => Some(n)
+      }
       .transact(xa)
 
   override def delete(id: UUID): F[Option[Int]] =
